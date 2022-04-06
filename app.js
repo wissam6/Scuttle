@@ -21,7 +21,7 @@ app.use('/', router);
 app.listen(3000);
 
 //discord api key
-client.login('OTYwMjEwNTcyMTk5MjAyODM2.YknHyA.s7JTzhWDICqPPAGTJcTDaLOXdXA');
+client.login('');
 client.once('ready', () => {
     console.log("Scuttle is now online");
 });
@@ -47,8 +47,8 @@ client.on('messageCreate', async (message) => {
             const info = await axios.get(url);
             const iconId = info.data.profileIconId;
             
-            client.channels.cache.get('960475513275682858').send("name: " + info.data.name + "\nlevel: " + info.data.summonerLevel
-            + "\nid: " + info.data.id + "\naccount id: " + info.data.accountId + "\npuu id: " + info.data.puuid);
+            client.channels.cache.get('960475513275682858').send(">>> **Name: ** ``" + info.data.name + "\n``**Level:** ``" + info.data.summonerLevel
+            + "\n``**id:** ||``" + info.data.id + "\n``||**account id:** ||``" + info.data.accountId + "\n``||**puu id:** ||``" + info.data.puuid + "``||" );
             
             
             
@@ -87,7 +87,7 @@ client.on('messageCreate', async (message) => {
         url2 = url2.concat(id);
         const gameInfo = await axios.get(url2);
         if(typeof gameInfo.data.gameId === 'undefined') {
-            client.channels.cache.get('960475513275682858').send(summonerName + " is not in game");
+            client.channels.cache.get('960475513275682858').send("``" + summonerName + "`` is not in game");
         }
         else{
             Participants = gameInfo.data.participants;
@@ -122,8 +122,8 @@ client.on('messageCreate', async (message) => {
             }
             const game_length = gameInfo.data.gameLength + 280;
             const time = Math.floor(game_length / 60) + ":" + (game_length % 60 ? game_length % 60 : '00');
-            client.channels.cache.get('960475513275682858').send("game mode: " +gameInfo.data.gameMode + "\ngame type: " + gameInfo.data.gameType + "\nchampion: " + currentChampion
-            + "\ngame time: " + time);
+            client.channels.cache.get('960475513275682858').send(">>> **game mode:** ``" +gameInfo.data.gameMode + "\n``**game type:** ``" + gameInfo.data.gameType + "\n``**champion:** ``" + currentChampion
+            + "\n``**game time:** ``" + time + "``");
         }
         
 
@@ -142,6 +142,7 @@ client.on('messageCreate', async (message) => {
             ChampName = ChampName + messageArray[a] + " ";
         }
         ChampName = ChampName + messageArray[messageArray.length-1];
+        
         
                 
                 //get id
@@ -167,14 +168,16 @@ client.on('messageCreate', async (message) => {
       
                 const champInfo = await axios.get(url2);
                 
-                
+                ChampName = ChampName.charAt(0).toUpperCase() + ChampName.slice(1);
+                championName = ChampName;
+
                if(champInfo.data.chestGranted == false) {
-                client.channels.cache.get('960475513275682858').send("champion: " + championName + "\nmastery level: " + champInfo.data.championLevel + 
-                "\npoints: " + champInfo.data.championPoints + "\nchest still not granted");
+                client.channels.cache.get('960475513275682858').send(">>> **champion:**`` " + championName + "\n``**mastery level:** ``" + champInfo.data.championLevel + 
+                "\n``**points:** ``" + champInfo.data.championPoints + "``\n``chest still not granted``");
                }
                else {
-                client.channels.cache.get('960475513275682858').send("champion: " + championName + "\nmaster level: " + champInfo.data.championLevel + 
-                "\npoints: " + champInfo.data.championPoints + "\nchest granted");
+                client.channels.cache.get('960475513275682858').send(">>> **champion:**`` " + championName + "\n``**mastery level:** ``" + champInfo.data.championLevel + 
+                "\n``**points:** ``" + champInfo.data.championPoints + "``\n``chest granted``");
                }
                 
                 
@@ -219,9 +222,18 @@ client.on('messageCreate', async (message) => {
             var Losses = parseInt(losses[0]);
             var winRate = (Wins / (Wins + Losses) ) * 100;
             winRate = Math.round(winRate);
+
             
-            client.channels.cache.get('960475513275682858').send("queue: "+ queueType[0] +"\nrank: " + tier[0] + " " + rank2[0] + "\npoints: " + points[0]
-            + "\nwins/losses: " + wins[0] + "/" + losses[0] +  " (" + winRate +  "%)");
+            if(queueType[0] == 'RANKED_SOLO_5x5') {
+                client.channels.cache.get('960475513275682858').send(">>> **queue:** ``"+ queueType[0] +"``\n**rank:**`` " + tier[0] + " " + rank2[0] + "``\n**points:** ``" + points[0]
+            + "``\n**wins/losses:** ``" + wins[0] + "/" + losses[0] +  " (" + winRate +  "%)``");
+            }
+            else {
+                client.channels.cache.get('960475513275682858').send(">>> **queue:** ``"+ queueType[1] +"``\n**rank:**`` " + tier[1] + " " + rank2[1] + "``\n**points:** ``" + points[1]
+            + "``\n**wins/losses:** ``" + wins[1] + "/" + losses[1] +  " (" + winRate +  "%)``");
+            }
+            
+            
         }
         if(lastWord == 'flex') {
             var Wins = parseInt(wins[1]);
@@ -229,8 +241,15 @@ client.on('messageCreate', async (message) => {
             var winRate = (Wins / (Wins + Losses) ) * 100;
             winRate = Math.round(winRate);
             
-            client.channels.cache.get('960475513275682858').send("queue: "+ queueType[1] +"\nrank: " + tier[1] + " " + rank2[1] + "\npoints: " + points[1]
-            + "\nwins/losses: " + wins[1] + "/" + losses[1] +  " (" + winRate +  "%)");
+            if(queueType[1] == 'RANKED_FLEX_SR') {
+                client.channels.cache.get('960475513275682858').send(">>> **queue:** ``"+ queueType[1] +"``\n**rank:**`` " + tier[1] + " " + rank2[1] + "``\n**points:** ``" + points[1]
+            + "``\n**wins/losses:** ``" + wins[1] + "/" + losses[1] +  " (" + winRate +  "%)``");
+            }
+            else {
+                client.channels.cache.get('960475513275682858').send(">>> **queue:** ``"+ queueType[0] +"``\n**rank:**`` " + tier[0] + " " + rank2[0] + "``\n**points:** ``" + points[0]
+            + "``\n**wins/losses:** ``" + wins[0] + "/" + losses[0] +  " (" + winRate +  "%)``");
+            }
+
         }
 
         
@@ -239,9 +258,9 @@ client.on('messageCreate', async (message) => {
     }
 
     if(messageArray[1] == "help") {
-        client.channels.cache.get('960475513275682858').send('to see champion info: !sc summonerName champion championName' +
+        client.channels.cache.get('960475513275682858').send('>>> ```to see champion info: !sc summonerName champion championName' +
         '\nto get my info: !sc summonerName info\nto get icon: !sc summonerName icon\nto get rank info: !sc summonerName rank queueType' + 
-        "\nto see game info: !sc summonerName game");
+        "\nto see game info: !sc summonerName game```");
     }
 
     //get icon
@@ -276,7 +295,7 @@ client.on('messageCreate', async (message) => {
                         
                         
                         for(var c=0;c<result.length;c++) {
-                            if(result2[c] == championName) {
+                            if(result2[c].toString().toLowerCase() == championName.toLowerCase()) {
                                 //console.log(result2[c]);
                                 champId = result[c]; //id
                                 //console.log(champId);

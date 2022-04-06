@@ -1,6 +1,6 @@
 const req = require("express/lib/request");
 const fetch = require("node-fetch");
-const riotKey = 'RGAPI-ad1770a6-9e2b-4e79-b847-3bc0d8c9d098';
+const riotKey = '';
 
     //show summoner info
     
